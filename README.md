@@ -36,44 +36,44 @@ The configuration file should be formatted as a .config file that specifies two 
 that can be done on the assembly (each on a new line), and which sequences should be included in the operation.
 
 The operations are as follows:
-
-	d: delete - all specified contigs name are removed from the main output file.
-        	format: d:<contig name>,<contig name>,...
-    m: move - all specified contigs are reorganized into order given, with the first contig remaining in its original position, and all following contigs being placed after the contig that immediately preceded it in the ordering.
-        	format: m:<contig name>-><contig name>-><contig name>...
-
+```
+d: delete - all specified contigs name are removed from the main output file.
+	format: d:<contig name>,<contig name>,...
+m: move - all specified contigs are reorganized into order given, with the first contig remaining in its original position, and all following contigs being placed after the contig that immediately preceded it in the ordering.
+        format: m:<contig name>-><contig name>-><contig name>...
+```
 Given the following example query list,  
-
-      y tics
-      contig_1
-	  contig_2
-	  contig_3
-	  contig_4
-	  contig_5
-	  contig_6
-	  contig_7
-	  contig_8
-	  contig_9
-	  contig_10
-
+```
+y tics
+contig_1
+contig_2
+contig_3
+contig_4
+contig_5
+contig_6
+contig_7
+contig_8
+contig_9
+contig_10
+```
 an example configuration file would be:
-
-      d:4,5
-	  m:3->9->2
-	  m:7->6
-
+```
+d:4,5
+m:3->9->2
+m:7->6
+```
 After running CustomQueryList with the example query list and configuration files as inputs, the outputted query list would be:
-
-      y tics
-      contig_1
-	  contig_3
-	  contig_9
-	  contig_2
-	  contig_7
-	  contig_6
-	  contig_8
-	  contig_10
-
+```
+y tics
+contig_1
+contig_3
+contig_9
+contig_2
+contig_7
+contig_6
+contig_8
+contig_10
+```
 The configuration file does not need to include specifications for all operations, and you can have multiple lines
 for the same operations (for example, you can have multiple sets of reorder contigs, can specify contigs to be deleted over multiple lines).
 
@@ -82,4 +82,4 @@ This tool was primarily used as an internal tool to process query lists that wer
 Feel free to modify and/or build upon this code to fit your specific usage and needs.
 
 # License
-This porgram is licensed under the Apache License Version 2.0. A copy of the Apache 2.0 license can be found [here](https://github.com/AvivBenchorin/CustomQueryList/blob/main/LICENSE).
+This program is licensed under the Apache License Version 2.0. A copy of the Apache 2.0 license can be found [here](https://github.com/AvivBenchorin/CustomQueryList/blob/main/LICENSE).
