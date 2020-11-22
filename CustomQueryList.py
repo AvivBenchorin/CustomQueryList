@@ -1,5 +1,22 @@
 import sys, getopt
 
+usage_prompt = """
+python customQueryList.py [-h] -i <input> -o <output> -c <config>
+
+	<input>
+                input file in FASTA format (with sequence naming format of "contig_<sequence name>")
+                containing sequences that will be processed
+        <output>
+                output file in FASTA format containing processed sequences,
+                excluding sequences that were specified to be filtered out
+        <config>
+                input file in .config configuration file format (specified at the Github page)
+
+options:
+	-h, --help
+         	prints out the above usage statement
+"""
+
 def process_assembly(infilepath, outfilepath, configfilepath):
 
         configfile = open(configfilepath, 'r')
@@ -13,15 +30,12 @@ def process_assembly(infilepath, outfilepath, configfilepath):
                                 delete_list.append(contig)
                 elif operation == 'm': #move to below the given contig
                         contigs_list = inputs[1].rstrip().split('->')
-                        print(contigs_list)
 			if len(contigs_list) > 1:
                                 move_contig_directory[contigs_list[-1]] = []
                                 for contig in contigs_list:
                                         move_contig_directory[contigs_list[-1]].append(contig)
-				print(move_contig_directory)
                 
         configfile.close()
-        print(move_contig_directory.items())
         infile = open(infilepath, 'r')
         outfile = open(outfilepath, 'w')
         for line in infile:
@@ -29,13 +43,11 @@ def process_assembly(infilepath, outfilepath, configfilepath):
                        continue
                 elif len([contig for contig in move_contig_directory.keys() if 'contig_' + contig + '\t' in line or 'scaffold_' + contig + '\t' in line]) > 0:
                         contig_name = [contig for contig in move_contig_directory.keys() if 'contig_' + contig + '\t' in line or 'scaffold_' + contig + '\t' in line]
-                       	print(contig_name[0])
 			for contig in move_contig_directory[contig_name[0]]:
                                outfile.write('contig_' + contig + '\n')
                 else:
                         is_accounted_for = False
                         for contig_list in move_contig_directory.values():
-                                #print(contig_list)
 				if len([contig for contig in contig_list if 'contig_' + contig + '\t'in line or 'scaffold_' + contig + '\t' in line]) > 0:
                                         is_accounted_for = True
                                         break
@@ -50,11 +62,11 @@ def main():
         try:
                 opts, args = getopt.getopt(sys.argv[1:], "hi:o:c:", ["help"])
         except getopt.GetoptError as err:
-                print('python customQueryList.py [-h] -i <input file> -o <output file> -c <config file>')
+                print(usage_prompt)
                 print(str(err))
         for opt, arg in opts:
                 if opt in ('-h', '--help'):
-                        print('python customQueryList.py [-h] -i <input file> -o <output file> -c <config file>')
+                        print(usage_prompt)
                 	return
 		elif opt == '-i':
                         infile = arg
@@ -62,6 +74,9 @@ def main():
                         outfile = arg
                 elif opt == '-c':
                         configfile = arg
+                else:
+                        print(usage_prompt)
+                        return
         process_assembly(infile,outfile,configfile)
 
 
